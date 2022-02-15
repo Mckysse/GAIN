@@ -1,6 +1,7 @@
 # USTC-NELSLIP-SemEval2022Task11-IGNF
 This repository containing the training and prediction code of the system developed by the USTC-NELSLIP team for SemEval-2022 Task 11 MultiCoNER.
 
+
 ### Setting up the code environment
 
 ```
