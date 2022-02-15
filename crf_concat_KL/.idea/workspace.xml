@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26ff4289-7ff7-4b58-abd4-9cccc8d9c9ae" name="Default Changelist" comment="" />
+    <list default="true" id="c49ddc0f-5d0f-449a-9eff-de2897b6f41e" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="259jHgAxs6jNmARof5GdIyUrpJT" />
+  <component name="ProjectId" id="259ngGNs4eHIBVHCOU4LFQxWOTj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -27,28 +20,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/crf_concat_KL/utils" />
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\jiajun\Documents\GitHub\USTC-NELSLIP-SemEval2022Task11-IGNF\crf_concat_KL\utils" />
-      <recent name="C:\Users\jiajun\Documents\GitHub\USTC-NELSLIP-SemEval2022Task11-IGNF\crf_weighted_addition" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\jiajun\Documents\GitHub\USTC-NELSLIP-SemEval2022Task11-IGNF\crf_concat_KL\searchtrie" />
-      <recent name="C:\Users\jiajun\Documents\GitHub\USTC-NELSLIP-SemEval2022Task11-IGNF\crf_concat_KL" />
-    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="26ff4289-7ff7-4b58-abd4-9cccc8d9c9ae" name="Default Changelist" comment="" />
-      <created>1644946115248</created>
+      <changelist id="c49ddc0f-5d0f-449a-9eff-de2897b6f41e" name="Default Changelist" comment="" />
+      <created>1644948279117</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1644946115248</updated>
-      <workItem from="1644946119605" duration="1777000" />
-      <workItem from="1644948411666" duration="346000" />
+      <updated>1644948279117</updated>
+      <workItem from="1644948280749" duration="117000" />
     </task>
     <servers />
   </component>

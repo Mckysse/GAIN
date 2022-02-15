@@ -1,8 +1,14 @@
 import logging
+import os
+import sys
+import torch
+import pickle
 import codecs
 import numpy as np
 from collections import defaultdict
 import pdb
+from torch.utils.data import TensorDataset
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +23,8 @@ class TrieNode(object):
 
 class Trie(object):
     def __init__(self, words):
-        self.root = TrieNode()  # 根节点的子节点包含词典中所有单词的第一个字
-        self.count = 0  # 字典的单词数量
+        self.root = TrieNode()
+        self.count = 0
         self.words = words
         for word in words:
             self.insert(word)
@@ -136,6 +142,7 @@ def format_query_by_features(text, feature_dim,
         I_fea = "I-" + fea_name
 
         for pos in feature_list:
+            # print(pos)
             start = pos[0]
             end = pos[1]
             if start == end:

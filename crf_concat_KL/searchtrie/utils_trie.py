@@ -1,23 +1,16 @@
 import logging
 import os
-import sys
-import torch
-import pickle
-import codecs
 import numpy as np
-from collections import defaultdict
 import pdb
-from torch.utils.data import TensorDataset
-from tqdm import tqdm
 from torch.nn import CrossEntropyLoss
 import copy
-
 from searchtrie.trie import build_ac_trie, format_query_by_features
 
 logger = logging.getLogger(__name__)
 
 
-def listdir(path, list_name):
+def listdir(path, list_name):  # 传入存储的list
+
     for file in os.listdir(path):
         file_path = os.path.join(path, file)
         if os.path.isdir(file_path):
@@ -34,6 +27,7 @@ def create_tree(label2id, features_list):
 def build_cedar(label2id, features_list):
     feature_dict = label2id
     feature_dim = len(feature_dict)
+    feature_set = set()
     errInfo, feature_set = get_feature_names(feature_dict)
     feature_config = {}
 
@@ -64,26 +58,6 @@ def get_feature_names(feature_dict):
         if len(feature_split) == 2:
             name_set.add(feature_split[1])
     return "", name_set
-
-
-def get_Dataset(args, processor, tokenizer, feature_dim, feature_dict, feature_ac_trie, filepath, label_mode='a',
-                fea_mode='a'):
-    examples = processor.get_examples(filepath)
-    label_list = args.label_list
-
-    features = convert_examples_to_features(
-        args, examples, label_list, args.max_seq_length, tokenizer, feature_dim, feature_dict, feature_ac_trie,
-        label_mode, fea_mode
-    )
-
-    all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
-    all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
-    all_label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
-    all_feature = torch.tensor([f.feature for f in features], dtype=torch.float32)
-
-    data = TensorDataset(all_input_ids, all_input_mask, all_label_ids, all_feature)
-
-    return examples, features, data
 
 
 class InputFeatures(object):
@@ -129,119 +103,6 @@ def add_fea_BtoI(label_map, onefea, len_word):
     return fea
 
 
-def convert_examples_to_features(args, examples, label_list, max_seq_length, tokenizer, feature_dim, feature_dict,
-                                 feature_ac_trie, label_mode='a', fea_mode='a'):
-    cls_token = tokenizer.cls_token
-    sep_token = tokenizer.sep_token
-    pad_token = tokenizer.convert_tokens_to_ids([tokenizer.pad_token])[0]
-    label_map = {label: i for i, label in enumerate(label_list)}
-    features = []
-
-    for (ex_index, example) in enumerate(examples):
-        textlist = example.text.split(" ")
-        labellist = example.label.split(" ")
-        assert len(textlist) == len(labellist)
-
-        fea = format_query_by_features(textlist, feature_dim, feature_dict, feature_ac_trie, len(textlist))
-        fea = fea.tolist()
-
-        tokens = []
-        label_ids = []
-        fea_s = []
-
-        # tokenize process
-        for word, label, onefea in zip(textlist, labellist, fea):
-            word_tokens = tokenizer.tokenize(word)
-            if len(word) != 0 and len(word_tokens) == 0:
-                word_tokens = [tokenizer.unk_token]
-            if len(word_tokens) == 0:
-                print(ex_index)
-                print(textlist)
-                raise ValueError("find a None word_token")
-            tokens.extend(word_tokens)
-            # 选择一个label_mode : a. 如果是B-,后面转成I- b.subtoken填入 ignore_index
-            if label_mode == 'a':
-                label_ids.extend(add_label_BtoI(label_map, label, len(word_tokens)))
-            elif label_mode == 'b':
-                pad_token_label_id = CrossEntropyLoss().ignore_index
-                label_ids.extend([label_map[label]] + [pad_token_label_id] * (len(word_tokens) - 1))
-            else:
-                raise ValueError("label_mode must be one of a or b")
-            if fea_mode == 'a':
-                for i in range(len(word_tokens)):
-                    fea_s.append(onefea)
-            elif fea_mode == 'b':
-                if len(word_tokens) == 1:
-                    fea_s.append(onefea)
-                elif len(word_tokens) > 1:
-                    fea_s.append(onefea)
-                    fea_s.extend(add_fea_BtoI(label_map, onefea, len(word_tokens)))
-            else:
-                raise ValueError("fea_mode must be one of a or b")
-
-        # add [CLS] and [SEP]
-        if len(tokens) > max_seq_length - 2:
-            print('truncate token', ex_index, len(tokens), max_seq_length, 2)
-            tokens = tokens[:(max_seq_length - 2)]
-            label_ids = label_ids[:(max_seq_length - 2)]
-            fea_s = fea_s[:(max_seq_length - 2)]
-
-        if label_mode == 'a':
-            pad_token_label_id = label_map['O']
-        elif label_mode == 'b':
-            pad_token_label_id = CrossEntropyLoss().ignore_index
-        else:
-            raise ValueError("label_mode must be one of a or b")
-
-        tokens = [cls_token] + tokens + [sep_token]
-        label_ids = [pad_token_label_id] + label_ids + [pad_token_label_id]
-        zero = [0.] * feature_dim
-        fea_s.insert(0, zero)
-        fea_s.append(zero)
-
-        # 构造网络输入
-        input_ids = tokenizer.convert_tokens_to_ids(tokens)
-        input_mask = [1] * len(input_ids)
-
-        padding_length = max_seq_length - len(input_ids)
-
-        input_ids += ([pad_token] * padding_length)
-        input_mask += ([0] * padding_length)
-        label_ids += ([pad_token_label_id] * padding_length)
-        fea_s.extend([zero] * padding_length)
-
-        assert (len(fea_s)) == max_seq_length
-
-        fea_s = np.array(fea_s)
-
-        assert len(input_ids) == max_seq_length
-        assert len(input_mask) == max_seq_length
-        assert len(label_ids) == max_seq_length
-
-        # pdb.set_trace()
-
-        if ex_index < 5:
-            logger.info("*** Example ***")
-            logger.info("guid: %s" % example.guid)
-            logger.info("tokens: %s" % " ".join(
-                [str(x) for x in tokens]))
-            logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-            logger.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
-            logger.info("label_ids: %s" % " ".join([str(x) for x in label_ids]))
-
-        features.append(
-            InputFeatures(input_ids=input_ids,
-                          input_mask=input_mask,
-                          label_id=label_ids,
-                          ori_tokens=tokens,
-                          feature=fea_s
-                          ))
-
-        # pdb.set_trace()
-
-    return features
-
-
 def extract_spans_byids(tags):
     cur_tag = None
     cur_start = None
@@ -273,6 +134,16 @@ def extract_spans_byids(tags):
     return gold_spans
 
 
+def generate_fea_from_labels(labellist, feature_dim, label_map):
+    fea = np.ones((len(labellist), feature_dim)) * 0
+
+    for idx, the_label in enumerate(labellist):
+        if not (the_label == 'O'):
+            fea[idx][label_map[the_label]] = 1
+
+    return fea
+
+
 def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length, tokenizer, feature_dim, feature_dict,
                                            feature_ac_trie, label_mode='a', fea_mode='a'):
     cls_token = tokenizer.cls_token
@@ -289,13 +160,17 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
     fea = format_query_by_features(textlist, feature_dim, feature_dict, feature_ac_trie, len(textlist))
     fea = fea.tolist()
 
+    train_fea = generate_fea_from_labels(labellist, feature_dim, label_map)
+    train_fea = train_fea.tolist()
+
     tokens = []
     label_ids = []
     fea_s = []
+    train_fea_s = []
     head_token_pos = []
 
     # tokenize process
-    for word, label, onefea in zip(textlist, labellist, fea):
+    for word, label, onefea, one_trainfea in zip(textlist, labellist, fea, train_fea):
         word_tokens = tokenizer.tokenize(word)
         if len(word) != 0 and len(word_tokens) == 0:
             word_tokens = [tokenizer.unk_token]
@@ -305,7 +180,6 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
         tokens.extend(word_tokens)
         head_token_pos += [1] + [0 for i in range(len(word_tokens) - 1)]
 
-        # 选择一个label_mode : a. 如果是B-,后面转成I- b.subtoken填入 ignore_index
         if label_mode == 'a':
             label_ids.extend(add_label_BtoI(label_map, label, len(word_tokens)))
         elif label_mode == 'b':
@@ -313,6 +187,7 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
             label_ids.extend([label_map[label]] + [pad_token_label_id] * (len(word_tokens) - 1))
         else:
             raise ValueError("label_mode must be one of a or b")
+
         if fea_mode == 'a':
             for i in range(len(word_tokens)):
                 fea_s.append(onefea)
@@ -325,12 +200,25 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
         else:
             raise ValueError("fea_mode must be one of a or b")
 
+        if fea_mode == 'a':
+            for i in range(len(word_tokens)):
+                train_fea_s.append(one_trainfea)
+        elif fea_mode == 'b':
+            if len(word_tokens) == 1:
+                train_fea_s.append(one_trainfea)
+            elif len(word_tokens) > 1:
+                train_fea_s.append(one_trainfea)
+                train_fea_s.extend(add_fea_BtoI(label_map, one_trainfea, len(word_tokens)))
+        else:
+            raise ValueError("fea_mode must be one of a or b")
+
     # add [CLS] and [SEP]
     if len(tokens) > max_seq_length - 2:
         print('truncate token', len(tokens), max_seq_length, 2)
         tokens = tokens[:(max_seq_length - 2)]
         label_ids = label_ids[:(max_seq_length - 2)]
         fea_s = fea_s[:(max_seq_length - 2)]
+        train_fea_s = train_fea_s[:(max_seq_length - 2)]
         head_token_pos = head_token_pos[:(max_seq_length - 2)]
 
     if label_mode == 'a':
@@ -347,7 +235,8 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
     fea_s.append(zero)
     head_token_pos = [0] + head_token_pos + [0]
 
-    # pdb.set_trace()
+    train_fea_s.insert(0, zero)
+    train_fea_s.append(zero)
 
     input_ids = tokenizer.convert_tokens_to_ids(tokens)
     input_mask = [1] * len(input_ids)
@@ -360,10 +249,13 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
     input_mask += ([0] * padding_length)
     label_ids += ([pad_token_label_id] * padding_length)
     fea_s.extend([zero] * padding_length)
+    train_fea_s.extend([zero] * padding_length)
 
     assert (len(fea_s)) == max_seq_length
+    assert (len(train_fea_s)) == max_seq_length
 
     fea_s = np.array(fea_s)
+    train_fea_s = np.array(train_fea_s)
 
     assert len(input_ids) == max_seq_length
     assert len(input_mask) == max_seq_length
@@ -371,4 +263,4 @@ def convert_examples_to_features_foronesnt(examples, label_list, max_seq_length,
 
     # pdb.set_trace()
 
-    return tokens, input_ids, input_mask, label_ids, gold_spans_, fea_s, head_token_pos
+    return tokens, input_ids, input_mask, label_ids, gold_spans_, fea_s, train_fea_s, head_token_pos
