@@ -21,7 +21,7 @@ $ pip install -r requirements.txt
 ### Arguments
 Most of our arguments are the same as those in [MULTI-CONER NER Baseline System](https://github.com/amzn/multiconer-baseline).
 
-Notice that we add *gazetteer* argument to introduce the path of gazetteer.
+Notice that we add argument *gazetteer* to introduce the path of gazetteer.
 
 ```
     p.add_argument('--train', type=str, help='Path to the train data.', default=None)
@@ -63,13 +63,13 @@ Train a xlm-roberta-large based model. The pretrained xlmr model is from [Huggin
 
 `bash run_train.sh`
 
-**2. Fine-Tuning**
+**3. Fine-Tuning**
 
 Fine-tuning from a pretrained NER model.
 
 `bash run_finetune.sh`
 
-**2. Predicting**
+**4. Predicting**
 
 Predicting the tags from a pretrained model. 
 
