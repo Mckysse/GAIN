@@ -5,9 +5,9 @@ team for SemEval-2022 Task 11 MultiCoNER.
 We provide code of two gazetteer-based methods used in our final system, **IGNF** and **weighted 
 addition fusion with gazetteer method**.
 
-[IGNF](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-IGNF/tree/main/crf_concat_KL): Intensified Gazetteer Network Fusion method with crf classifier mentioned in Section 3.3 in [paper](arxiv pages).
+[IGNF](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-IGNF/tree/main/IGNF): Intensified Gazetteer Network Fusion method with crf classifier mentioned in Section 3.3 in [paper](arxiv pages).
 
-[weighted_fusion_crf](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-IGNF/tree/main/crf_weighted_addition): Weighted sum fusion with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](arxiv pages).
+[weighted_fusion_crf](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-IGNF/tree/main/weighted_fusion_crf): Weighted sum fusion with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](arxiv pages).
 
 
 ## Getting Started
@@ -53,7 +53,7 @@ Notice that we add *gazetteer* argument to introduce the path of gazetteer.
 
 **1. Move into the folder of method you chose**
 
-`cd IGNF` or `cd weighted`
+`cd IGNF` or `cd weighted_fusion_crf`
 
 #### Before you running any shell file, you need to modify the arguments to your own paths or hyper-parameters at first.
 
@@ -79,4 +79,4 @@ Predicting the tags from a pretrained model.
 [MULTI-CONER NER Baseline System](https://github.com/amzn/multiconer-baseline)
 
 ## License 
-The code under this repository is licensed under the [Apache 2.0 License]().
+The code under this repository is licensed under the [Apache 2.0 License](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-IGNF/blob/main/LICENSE).
