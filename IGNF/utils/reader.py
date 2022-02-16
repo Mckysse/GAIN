@@ -11,11 +11,13 @@ from searchtrie.utils_trie import create_tree, convert_examples_to_features_foro
 import pdb
 
 import os
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 class CoNLLReader(Dataset):
-    def __init__(self, max_instances=-1, max_length=50, target_vocab=None, pretrained_dir='', encoder_model='xlm-roberta-large'):
+    def __init__(self, max_instances=-1, max_length=50, target_vocab=None, pretrained_dir='',
+                 encoder_model='xlm-roberta-large'):
         self._max_instances = max_instances
         self._max_length = max_length
 
@@ -41,66 +43,42 @@ class CoNLLReader(Dataset):
         return self.instances[item]
 
     def read_data(self, data, gazetteer=None):
-        all_data_dir = os.path.dirname(data)
-        all_cached_dir = os.path.join(all_data_dir,'all_cached/')
-        process_file_name = data.split('/')[-1]
-        lang = process_file_name.split('_')[0]
-        mode = (process_file_name.split('_')[-1]).split('.')[0]
-        
-        cached_features_file = os.path.join(all_cached_dir, "cached_{}_{}_{}".format(mode, lang, self._max_length))
+        dataset_name = data if isinstance(data, str) else 'dataframe'
+        logger.info('Reading file {}'.format(dataset_name))
+        instance_idx = 0
 
-        if not os.path.exists(all_cached_dir):
-            os.makedirs(all_cached_dir)
+        feature_dim, feature_dict, feature_ac_trie = create_tree(self.label_to_id, gazetteer)
 
-        if os.path.exists(cached_features_file):
-            logger.info("Loading features from cached file %s", cached_features_file)
-            self.instances = torch.load(cached_features_file)
-            instance_idx = len(self.instances)
-        else:
+        for fields in get_ner_reader(data=data):
+            if self._max_instances != -1 and instance_idx > self._max_instances:
+                break
 
+            # pdb.set_trace()
 
-            dataset_name = data if isinstance(data, str) else 'dataframe'
-            logger.info('Reading file {}'.format(dataset_name))
-            instance_idx = 0
+            sentence_str, tokens_sub_rep, token_masks_rep, coded_ner_, gold_spans_, feature_input_, train_label_feature_, head_pos = convert_examples_to_features_foronesnt(
+                fields,
+                self.label_to_id,
+                self._max_length,
+                self.tokenizer,
+                feature_dim,
+                feature_dict,
+                feature_ac_trie,
+                label_mode='a',
+                fea_mode='b')
 
-            feature_dim, feature_dict, feature_ac_trie = create_tree(self.label_to_id, gazetteer)
+            tokens_tensor = torch.tensor(tokens_sub_rep, dtype=torch.long)
+            tag_tensor = torch.tensor(coded_ner_, dtype=torch.long).unsqueeze(0)
+            token_masks_rep = torch.tensor(token_masks_rep, dtype=torch.long)
 
-            for fields in get_ner_reader(data=data):
-                if self._max_instances != -1 and instance_idx > self._max_instances:
-                    break
-                
-                #print(fields)
+            feature_input = torch.tensor(feature_input_, dtype=torch.float32)
 
-                #pdb.set_trace()
-                
-                #sentence_str, tokens_sub_rep, token_masks_rep, coded_ner_, gold_spans_ = self.parse_line_for_ner(fields=fields)
-                sentence_str, tokens_sub_rep, token_masks_rep, coded_ner_, gold_spans_, feature_input_, train_label_feature_, head_pos  = convert_examples_to_features_foronesnt(fields, 
-                                                                                                                                                                      self.label_to_id, 
-                                                                                                                                                                      self._max_length, 
-                                                                                                                                                                      self.tokenizer, 
-                                                                                                                                                                      feature_dim, 
-                                                                                                                                                                      feature_dict, 
-                                                                                                                                                                      feature_ac_trie, 
-                                                                                                                                                                      label_mode='a', 
-                                                                                                                                                                      fea_mode='b')
-                # print(sentence_str)
-                # print(tokens_sub_rep)
-                # print(coded_ner_)
+            train_label_feature = torch.tensor(train_label_feature_, dtype=torch.float32)
 
-                tokens_tensor = torch.tensor(tokens_sub_rep, dtype=torch.long)
-                tag_tensor = torch.tensor(coded_ner_, dtype=torch.long).unsqueeze(0)
-                token_masks_rep = torch.tensor(token_masks_rep, dtype=torch.long)
-                
-                feature_input = torch.tensor(feature_input_, dtype=torch.float32)
-
-                train_label_feature = torch.tensor(train_label_feature_, dtype=torch.float32)
-
-                self.instances.append((tokens_tensor, token_masks_rep, gold_spans_, tag_tensor, feature_input, train_label_feature, head_pos))
-                instance_idx += 1
-            logger.info("Saving features into cached file {}, len(features)={}".format(cached_features_file, len(self.instances)))
-            torch.save(self.instances, cached_features_file)
+            self.instances.append(
+                (tokens_tensor, token_masks_rep, gold_spans_, tag_tensor, feature_input, train_label_feature, head_pos))
+            instance_idx += 1
         logger.info('Finished reading {:d} instances from file {}'.format(len(self.instances), data))
-        #pdb.set_trace()
+        # pdb.set_trace()
 
     def parse_line_for_ner(self, fields):
         tokens_, ner_tags = fields[0], fields[-1]
@@ -126,7 +104,6 @@ class CoNLLReader(Dataset):
             ner_tag = ner_tags[idx]
             tags, masks = _assign_ner_tags(ner_tag, rep_)
             ner_tags_rep.extend(tags)
-
 
         tokens_sub_rep.append(self.pad_token_id)
         ner_tags_rep.append('O')

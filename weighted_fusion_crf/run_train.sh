@@ -11,7 +11,7 @@ OUT_DIR=${4:-"$REPO/output/"}
 base_dir=${REPO}/../
 train_file=${DATA_DIR}/${LAN}_train.conll
 dev_file=${DATA_DIR}/${LAN}_dev.conll
-gazetteer_path=${base_dir}/gazetteers/gazetteer_demo/${LAN}
+gazetteer_path=${base_dir}/gazetteer_demo/${LAN}
 model_name="ner_${LAN}"
 
 python -m train_model --train "$train_file" --dev "$dev_file" --gazetteer "$gazetteer_path" --out_dir "$OUT_DIR" \

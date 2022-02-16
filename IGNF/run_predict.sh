@@ -11,7 +11,7 @@ OUT_DIR=${4:-"$REPO/output/"}
 model_name="ner_${LAN}"
 base_dir=${REPO}/../
 test_file=${DATA_DIR}/${LAN}_test.conll
-gazetteer_path=${base_dir}/gazetteers/gazetteer_demo/${LAN}
+gazetteer_path=${base_dir}/gazetteer_demo/${LAN}
 
 model_file_path=CKPT_MODEL_FILE_PATH
 

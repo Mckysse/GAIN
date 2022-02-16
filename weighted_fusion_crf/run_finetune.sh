@@ -12,7 +12,7 @@ model_name="ner_${LAN}"
 base_dir=${REPO}/../
 train_file=${DATA_DIR}/${LAN}_train.conll
 dev_file=${DATA_DIR}/${LAN}_dev.conll
-gazetteer_path=${base_dir}/gazetteers/gazetteer_demo/${LAN}
+gazetteer_path=${base_dir}/gazetteer_demo/${LAN}
 
 ckpt_file_path=YOUR_MODEL_CKPT_FILE_PATH_TO_BE_LOADED_FOR_FINE_TUNNING
 
