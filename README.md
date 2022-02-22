@@ -5,7 +5,7 @@ team for SemEval-2022 Task 11 MultiCoNER.
 We provide code of two gazetteer-based methods used in our final system, **AGAN** and **weighted 
 addition fusion with gazetteer method**.
 
-[AGAN](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-AGAN/tree/main/AGAN): Adapted Gazetteer-Augmented Network with crf classifier mentioned in Section 3.3 in [paper](arxiv pages).
+[AGAN](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-AGAN/tree/main/IGNF): Adapted Gazetteer-Augmented Network with crf classifier mentioned in Section 3.3 in [paper](arxiv pages).
 
 [weighted_fusion_crf](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-AGAN/tree/main/weighted_fusion_crf): Weighted sum fusion with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](arxiv pages).
 
