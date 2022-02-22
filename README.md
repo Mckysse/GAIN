@@ -1,4 +1,4 @@
-# USTC-NELSLIP-SemEval2022Task11-IGNF
+# USTC-NELSLIP-SemEval2022Task11-AGAN
 This repository containing the training and prediction code of the system developed by the USTC-NELSLIP 
 team for SemEval-2022 Task 11 MultiCoNER.
 
