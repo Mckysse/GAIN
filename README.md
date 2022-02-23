@@ -2,12 +2,12 @@
 This repository containing the training and prediction code of the system developed by the USTC-NELSLIP 
 team for SemEval-2022 Task 11 MultiCoNER.
 
-We provide code of two gazetteer-based methods used in our final system, **GAIN** and **weighted 
-summation integration with gazetteer method**.
+We provide code of two gazetteer-based methods used in our final system, **GAIN** and **weighted summation integration with gazetteer method**.
 
-[GAIN](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-AGAN/tree/main/IGNF): Gazetteer-Adapted Integration Network with crf classifier mentioned in Section 3.3 in [paper](arxiv pages).
+[GAIN](https://github.com/Mckysse/GAIN/tree/main/GAIN): Gazetteer-Adapted Integration Network with crf classifier mentioned in Section 3.3 in [paper](https://arxiv.org/).
 
-[weighted_fusion_crf](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-GAIN/tree/main/weighted_fusion_crf): Weighted sum fusion with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](arxiv pages).
+[weighted_fusion_crf](https://github.com/Mckysse/GAIN/tree/main/weighted_fusion_crf): Weighted 
+summation integration with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](https://arxiv.org/).
 
 
 ## Getting Started
