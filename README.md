@@ -11,6 +11,11 @@ We provide code of two gazetteer-based methods used in our final system, **GAIN*
 summation integration with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](https://arxiv.org/).
 
 
+## Citation
+[USTC-NELSLIP at SemEval-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition](https://arxiv.org/)
+
+
+
 ## Getting Started
 
 ### Setting up the code environment
