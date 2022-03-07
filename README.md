@@ -1,5 +1,5 @@
 # USTC-NELSLIP-SemEval2022Task11-GAIN
-Winner system (USTC-NELSLIP) of SemEval 2022 MultiCoNER shared task over 3 out of 13 tracks. Rankings: https://multiconer.github.io/results.
+Winner system (USTC-NELSLIP) of SemEval 2022 MultiCoNER shared task over 3 out of 13 tracks(Chinese, Bangla, Code-Mixed). Rankings: https://multiconer.github.io/results.
 
 This repository containing the training and prediction code of the system developed by the USTC-NELSLIP team for SemEval-2022 Task 11 MultiCoNER.
 
