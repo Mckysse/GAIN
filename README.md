@@ -1,6 +1,7 @@
 # USTC-NELSLIP-SemEval2022Task11-GAIN
-This repository containing the training and prediction code of the system developed by the USTC-NELSLIP 
-team for SemEval-2022 Task 11 MultiCoNER.
+Winner system (USTC-NELSLIP) of SemEval 2022 MultiCoNER shared task over 3 out of 13 tracks. Rankings: https://multiconer.github.io/results.
+
+This repository containing the training and prediction code of the system developed by the USTC-NELSLIP team for SemEval-2022 Task 11 MultiCoNER.
 
 We provide code of two gazetteer-based methods used in our final system, **GAIN** and **weighted summation integration with gazetteer method**.
 
