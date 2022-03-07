@@ -85,4 +85,4 @@ Predicting the tags from a pretrained model.
 [MULTI-CONER NER Baseline System](https://github.com/amzn/multiconer-baseline)
 
 ## License 
-The code under this repository is licensed under the [Apache 2.0 License](https://github.com/Mckysse/USTC-NELSLIP-SemEval2022Task11-AGAN/blob/main/LICENSE).
+The code under this repository is licensed under the [Apache 2.0 License](https://github.com/Mckysse/GAIN/blob/main/LICENSE).
