@@ -13,6 +13,7 @@ summation integration with gazetteer method using crf classifier mentioned in Se
 
 ## Citation
 If you use this code, please cite the paper below:
+
 [USTC-NELSLIP at SemEval-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition](https://arxiv.org/pdf/2203.03216.pdf)
 
 
