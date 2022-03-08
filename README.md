@@ -8,11 +8,11 @@ We provide code of two gazetteer-based methods used in our final system, **GAIN*
 [GAIN](https://github.com/Mckysse/GAIN/tree/main/GAIN): Gazetteer-Adapted Integration Network with crf classifier mentioned in Section 3.3 in [paper](https://arxiv.org/).
 
 [weighted_fusion_crf](https://github.com/Mckysse/GAIN/tree/main/weighted_fusion_crf): Weighted 
-summation integration with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](https://arxiv.org/).
+summation integration with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](https://arxiv.org/pdf/2203.03216.pdf).
 
 
 ## Citation
-[USTC-NELSLIP at SemEval-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition](https://arxiv.org/)
+[USTC-NELSLIP at SemEval-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition](https://arxiv.org/pdf/2203.03216.pdf)
 
 
 
