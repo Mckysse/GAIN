@@ -10,6 +10,9 @@ We provide code of two gazetteer-based methods used in our final system, **GAIN*
 [weighted_fusion_crf](https://github.com/Mckysse/GAIN/tree/main/weighted_fusion_crf): Weighted 
 summation integration with gazetteer method using crf classifier mentioned in Section 3.2 in [paper](https://arxiv.org/pdf/2203.03216.pdf).
 
+## Overall Structure
+![Image text](https://github.com/Mckysse/GAIN/blob/main/Gain.png)
+
 
 ## Citation
 If you use this code, please cite the paper below:
