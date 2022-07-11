@@ -17,7 +17,26 @@ summation integration with gazetteer method using crf classifier mentioned in Se
 ## Citation
 If you use this code, please cite the paper below:
 
-[USTC-NELSLIP at SemEval-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition](https://arxiv.org/pdf/2203.03216.pdf)
+[USTC-NELSLIP at SemEval-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition](https://aclanthology.org/2022.semeval-1.223.pdf)
+
+@inproceedings{chen-etal-2022-ustc,
+    title = "{USTC}-{NELSLIP} at {S}em{E}val-2022 Task 11: Gazetteer-Adapted Integration Network for Multilingual Complex Named Entity Recognition",
+    author = "Chen, Beiduo  and
+      Ma, Jun-Yu  and
+      Qi, Jiajun  and
+      Guo, Wu  and
+      Ling, Zhen-Hua  and
+      Liu, Quan",
+    booktitle = "Proceedings of the 16th International Workshop on Semantic Evaluation (SemEval-2022)",
+    month = jul,
+    year = "2022",
+    address = "Seattle, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.semeval-1.223",
+    pages = "1613--1622",
+    abstract = "This paper describes the system developed by the USTC-NELSLIP team for SemEval-2022 Task 11 Multilingual Complex Named Entity Recognition (MultiCoNER). We propose a gazetteer-adapted integration network (GAIN) to improve the performance of language models for recognizing complex named entities. The method first adapts the representations of gazetteer networks to those of language models by minimizing the KL divergence between them. After adaptation, these two networks are then integrated for backend supervised named entity recognition (NER) training. The proposed method is applied to several state-of-the-art Transformer-based NER models with a gazetteer built from Wikidata, and shows great generalization ability across them. The final predictions are derived from an ensemble of these trained models. Experimental results and detailed analysis verify the effectiveness of the proposed method. The official results show that our system ranked 1st on three tracks (Chinese, Code-mixed and Bangla) and 2nd on the other ten tracks in this task.",
+}
+
 
 
 
